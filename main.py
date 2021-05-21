@@ -23,3 +23,8 @@ if __name__ == '__main__':
     except pymysql.err.OperationalError as err:
         print('No fue posible realizar la conexión')
         print(err)
+    finally:
+        cursor.close()
+        connect.close()
+
+        print("Conexión finalizada de forma exitosa")
