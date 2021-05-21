@@ -31,6 +31,11 @@ if __name__ == '__main__':
             cursor.execute(DROP_TABLE_USERS)
             cursor.execute(USERS_TABLE)
 
+            query = "INSERT INTO users (username, password, email) VALUES (%s, %s, %s)"
+            values = ("walter", "clave123", "mail@mail.com")
+            cursor.execute(query, values)
+            connect.commit()
+
         print("Conexión realizada de forma exitosa")
     except pymysql.err.OperationalError as err:
         print('No fue posible realizar la conexión')
