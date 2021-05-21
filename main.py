@@ -19,6 +19,14 @@ export PASSWORD_MYSQL=
 export DB_MYSQL=pythondb
 """
 
+users = [
+    ("usuario1", "clave1", "mail1@mail.com"),
+    ("usuario2", "clave2", "mail2@mail.com"),
+    ("usuario3", "clave3", "mail3@mail.com"),
+    ("usuario4", "clave4", "mail4@mail.com"),
+]
+
+
 if __name__ == '__main__':
     try:
         connect = pymysql.Connect(host='localhost',
@@ -47,12 +55,20 @@ if __name__ == '__main__':
             # )
 
             ##### Forma 4 #####
-            username = "walter"
-            password = "clave123"
-            email = "mail@mail.com"
-            query = f"INSERT INTO users (username, password, email) VALUES ('{username}', '{password}', '{email}')"
+            # username = "walter"
+            # password = "clave123"
+            # email = "mail@mail.com"
+            # query = f"INSERT INTO users (username, password, email) VALUES ('{username}', '{password}', '{email}')"
 
-            cursor.execute(query)
+            ##### Clase 8 #####
+            query = "INSERT INTO users (username, password, email) VALUES (%s, %s, %s)"
+
+            ##### Clase 8 - forma 1 #####
+            # for user in users:
+            #     cursor.execute(query, users)
+
+            ##### Clase 8 - Forma 2 #####
+            cursor.executemany(query, users)
 
             connect.commit()
 
