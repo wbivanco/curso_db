@@ -31,9 +31,29 @@ if __name__ == '__main__':
             cursor.execute(DROP_TABLE_USERS)
             cursor.execute(USERS_TABLE)
 
-            query = "INSERT INTO users (username, password, email) VALUES (%s, %s, %s)"
-            values = ("walter", "clave123", "mail@mail.com")
-            cursor.execute(query, values)
+            ##### Forma1 #####
+            # query = "INSERT INTO users (username, password, email) VALUES (%s, %s, %s)"
+            # values = ("walter", "clave123", "mail@mail.com")
+            # cursor.execute(query, values)
+
+            ##### Forma 2 #####
+            # query = "INSERT INTO users (username, password, email) VALUES ('walter', 'clave123', 'mail@mail.com')"
+
+            ##### Forma 3 #####
+            # query = "INSERT INTO users (username, password, email) VALUES ('{}', '{}', '{}')".format(
+            #     "walter",
+            #     "clave123",
+            #     "mail@mail.com"
+            # )
+
+            ##### Forma 4 #####
+            username = "walter"
+            password = "clave123"
+            email = "mail@mail.com"
+            query = f"INSERT INTO users (username, password, email) VALUES ('{username}', '{password}', '{email}')"
+
+            cursor.execute(query)
+
             connect.commit()
 
         print("Conexión realizada de forma exitosa")
