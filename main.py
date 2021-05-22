@@ -70,7 +70,15 @@ if __name__ == '__main__':
             ##### Clase 8 - Forma 2 #####
             cursor.executemany(query, users)
 
+            # El metodo commit se llama solo cuando se desea hacer modificaciones en la BD, para los SELECT no
             connect.commit()
+
+            query = "SELECT * FROM users WHERE id >= 3"
+            rows = cursor.execute(query)
+            print(rows) # Devuelve un número
+
+            for user in cursor.fetchall(): # Fetchall devuelve una tupla con tuplas que son los registros
+                print(user)
 
         print("Conexión realizada de forma exitosa")
     except pymysql.err.OperationalError as err:
