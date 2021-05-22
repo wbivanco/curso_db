@@ -76,9 +76,26 @@ if __name__ == '__main__':
             query = "SELECT * FROM users WHERE id >= 3"
             rows = cursor.execute(query)
             print(rows) # Devuelve un número
-
-            for user in cursor.fetchall(): # Fetchall devuelve una tupla con tuplas que son los registros
+            for user in cursor.fetchall():  # Fetchall devuelve una tupla con tuplas que son los registros
                 print(user)
+
+            ##### Limitar forma 1 #####
+            query = "SELECT * FROM users LIMIT 3"
+            rows = cursor.execute(query)
+            for user in cursor.fetchall():
+                print(user)
+
+            ##### Limitar forma 2 #####
+            query = "SELECT * FROM users"
+            rows = cursor.execute(query)
+            for user in cursor.fetchmany(3):
+                print(user)
+
+            ##### Limitar forma 3 #####
+            query = "SELECT * FROM users"
+            rows = cursor.execute(query)
+            user = cursor.fetchone()
+            print(user)
 
         print("Conexión realizada de forma exitosa")
     except pymysql.err.OperationalError as err:
