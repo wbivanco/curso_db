@@ -102,6 +102,10 @@ if __name__ == '__main__':
             cursor.execute(query, values)
             connect.commit()
 
+            query = "DELETE FROM users WHERE id = %s"
+            cursor.execute(query, (4,))
+            connect.commit()
+
         print("Conexión realizada de forma exitosa")
     except pymysql.err.OperationalError as err:
         print('No fue posible realizar la conexión')
