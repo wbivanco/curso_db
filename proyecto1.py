@@ -9,27 +9,36 @@ USERS_TABLE = """ CREATE TABLE users(
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )"""
 
-def create_user():
+def create_user(connect, cursor):
     """ A) Crear Usario"""
+
+    username = input("Ingrese un username: ")
+    email = input("Ingrese un email: ")
+
+    query = "INSERT INTO users(username, email)  VALUES(%s, %s)"
+    values = (username, email)
+
+    cursor.execute(query, values)
+    connect.commit()
 
     print("Usuario creado")
 
-def list_users():
+def list_users(connect, cursor):
     """ B) Listar usuarios"""
 
     print("Listado de usuarios")
 
-def update_user():
+def update_user(connect, cursor):
     """ C) Actualizar Usuario"""
 
     print("Usuario modificado")
 
-def delete_user():
+def delete_user(connect, cursor):
     """ D) Eliminar usuario"""
 
     print("Usuario eliminado")
 
-def default():
+def default(*args):
     print("Opción no valida!")
 
 if __name__ == '__main__':
@@ -60,7 +69,7 @@ if __name__ == '__main__':
                     break
 
                 function = options.get(option, default)
-                function()
+                function(connect, cursor)
 
     except psycopg2.OperationalError as err:
         print("No fue posible realizar la conexion")
