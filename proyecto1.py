@@ -21,7 +21,7 @@ def create_user(connect, cursor):
     cursor.execute(query, values)
     connect.commit()
 
-    print("Usuario creado")
+    print(">>>> Usuario creado exitosamente")
 
 def list_users(connect, cursor):
     """ B) Listar usuarios"""
@@ -32,17 +32,45 @@ def list_users(connect, cursor):
     for id, username, email in cursor.fetchall():
         print(id, '-', username, '-', email)
 
-    print("Listado de usuarios")
+    print(">>>> Listado de usuarios")
 
 def update_user(connect, cursor):
     """ C) Actualizar Usuario"""
 
-    print("Usuario modificado")
+    id  = input("Ingrese el id del usuario a actualizar: ")
+
+    query = "SELECT * FROM users WHERE id = %s"
+    cursor.execute(query, (id, ))
+    user = cursor.fetchone()
+
+    if user :
+        username = input("Ingresa un nuevo username: ")
+        email = input("Inrese un nuevo email")
+
+        query = "UPDATE users SET username = %s, email = %s WHERE id = %s "
+        values = (username, email, id)
+        cursor.execute(query, values)
+        connect.commit()
+        print(">>>> Usuario actualizado exitosamente!")
+    else:
+        print("no existe un usuario con ese id, intenta de nuevo.")
 
 def delete_user(connect, cursor):
     """ D) Eliminar usuario"""
 
-    print("Usuario eliminado")
+    id = input("Ingrese el id del usuario a actualizar: ")
+
+    query = "SELECT * FROM users WHERE id = %s"
+    cursor.execute(query, (id,))
+    user = cursor.fetchone()
+
+    if user:
+        query = "DELETE FROM users WHERE id = %s "
+        cursor.execute(query, (id, ))
+        connect.commit()
+        print(">>>> Usuario eliminado exitosamente!")
+    else:
+        print("no existe un usuario con ese id, intenta de nuevo.")
 
 def default(*args):
     print("Opción no valida!")
