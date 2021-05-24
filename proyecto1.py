@@ -9,6 +9,22 @@ USERS_TABLE = """ CREATE TABLE users(
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )"""
 
+def user_exists(function):
+    def wrapper(connect, cursor):
+        id = input("Ingrese el id del usuario a actualizar: ")
+
+        query = "SELECT * FROM users WHERE id = %s"
+        cursor.execute(query, (id,))
+        user = cursor.fetchone()
+
+        if user:
+           function(id, connect, cursor)
+        else:
+            print("no existe un usuario con ese id, intenta de nuevo.")
+
+    wrapper.__doc__ = function.__doc__
+    return wrapper
+
 def create_user(connect, cursor):
     """ A) Crear Usario"""
 
@@ -34,43 +50,27 @@ def list_users(connect, cursor):
 
     print(">>>> Listado de usuarios")
 
-def update_user(connect, cursor):
+@user_exists
+def update_user(id, connect, cursor):
     """ C) Actualizar Usuario"""
 
-    id  = input("Ingrese el id del usuario a actualizar: ")
+    username = input("Ingresa un nuevo username: ")
+    email = input("Inrese un nuevo email")
 
-    query = "SELECT * FROM users WHERE id = %s"
-    cursor.execute(query, (id, ))
-    user = cursor.fetchone()
+    query = "UPDATE users SET username = %s, email = %s WHERE id = %s "
+    values = (username, email, id)
+    cursor.execute(query, values)
+    connect.commit()
+    print(">>>> Usuario actualizado exitosamente!")
 
-    if user :
-        username = input("Ingresa un nuevo username: ")
-        email = input("Inrese un nuevo email")
-
-        query = "UPDATE users SET username = %s, email = %s WHERE id = %s "
-        values = (username, email, id)
-        cursor.execute(query, values)
-        connect.commit()
-        print(">>>> Usuario actualizado exitosamente!")
-    else:
-        print("no existe un usuario con ese id, intenta de nuevo.")
-
-def delete_user(connect, cursor):
+@user_exists
+def delete_user(id, connect, cursor):
     """ D) Eliminar usuario"""
 
-    id = input("Ingrese el id del usuario a actualizar: ")
-
-    query = "SELECT * FROM users WHERE id = %s"
-    cursor.execute(query, (id,))
-    user = cursor.fetchone()
-
-    if user:
-        query = "DELETE FROM users WHERE id = %s "
-        cursor.execute(query, (id, ))
-        connect.commit()
-        print(">>>> Usuario eliminado exitosamente!")
-    else:
-        print("no existe un usuario con ese id, intenta de nuevo.")
+    query = "DELETE FROM users WHERE id = %s "
+    cursor.execute(query, (id, ))
+    connect.commit()
+    print(">>>> Usuario eliminado exitosamente!")
 
 def default(*args):
     print("Opción no valida!")
