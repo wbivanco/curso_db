@@ -26,6 +26,12 @@ def create_user(connect, cursor):
 def list_users(connect, cursor):
     """ B) Listar usuarios"""
 
+    query = "SELECT id, username, email FROM users"
+    cursor.execute(query)
+
+    for id, username, email in cursor.fetchall():
+        print(id, '-', username, '-', email)
+
     print("Listado de usuarios")
 
 def update_user(connect, cursor):
@@ -53,8 +59,8 @@ if __name__ == '__main__':
         connect = psycopg2.connect("postgresql://postgres:12345678@127.0.0.1/curso_bd")
 
         with connect.cursor() as cursor:
-            cursor.execute(DROP_USERS_TABLE)
-            cursor.execute(USERS_TABLE)
+            # cursor.execute(DROP_USERS_TABLE)
+            # cursor.execute(USERS_TABLE)
             connect.commit()
 
             while True:
