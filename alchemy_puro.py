@@ -1,10 +1,13 @@
 import json
-from datetime import datetime
 from sqlalchemy import create_engine
 
 from sqlalchemy import MetaData # Catalogo de tablas, puente entre la tabla y el gestor
 from sqlalchemy import Table, Column, Integer, String, DateTime # Permite manipular las tablas
+
 from sqlalchemy import select # Permite hacer consultas personalizadas
+from sqlalchemy import and_, or_, not_
+
+from sqlalchemy import asc, desc
 
 engine = create_engine('postgresql://postgres:12345678@localhost/curso_bd')
 metadata = MetaData()
@@ -33,21 +36,23 @@ if __name__ == '__main__':
             usuarios= json.load(file)
             connection.execute(query_insert, usuarios)
 
-            ## Primer método para select, método select hace sobre *(todos los campos)
-            ## SELECT * FROM users WHERE country = 'Argentina'
-            query_select = users.select(users.c.country == "Argentina")
 
-            ## Segundo método para hacer select, funcción select hace sobro los campos que quiero
-            ## SELECT id, email, nam FORM users WHERE country = 'Argentina'
-            # query_select = select([
-            #     users.c.id,
-            #     users.c.email,
-            #     users.c.name
-            # ]).where(
-            #     users.c.country == "Argentina"
-            # )
+            # Lista en consolo de forma descendente el nombre de los 10 primeros usuarios cuyo genero sea femenino
+            # y posean por pais Argentina o Chile
+            query_select = select([
+                users.c.name
+            ]).where(
+                and_(
+                    users.c.gender == "female",
+                    or_(
+                        users.c.country == "Argentina",
+                        users.c.country == "Chile"
+                    )
+                )
+            ).order_by(
+                desc(users.c.name)
+            ).limit(10)
 
-            print(query_select) # Imprimo la consulta
 
             result = connection.execute(query_select)
             for user in result.fetchall():
