@@ -33,12 +33,16 @@ if __name__ == '__main__':
         query_insert = users.insert()
 
         with open('users.json') as file:
-            users = json.load(file)
+            usuarios= json.load(file)
+            ## Forma optima de hacer el insert, hace un batch con los usuarios uan sola vez
+            connection.execute(query_insert, usuarios)
 
-            # Forma optima de hacer el insert, hace un batch con los usuarios uan sola vez
-            connection.execute(query_insert, users)
+            query_select = users.select()
+            result = connection.execute(query_select) # ResultProxy
+            for user in result.fetchall():
+                print(user.name) # RowProxy
 
-            # Forma no tan correcta porque hacer un insert por cada usuario
+            ## Forma no tan correcta porque hacer un insert por cada usuario
             # for user in users:
             #     query = query_insert.values(**user)
             #     connection.execute(query)
