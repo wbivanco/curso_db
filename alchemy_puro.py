@@ -6,6 +6,7 @@ from sqlalchemy import Table, Column, Integer, String, DateTime # Permite manipu
 
 from sqlalchemy import select # Permite hacer consultas personalizadas
 from sqlalchemy import update
+from sqlalchemy import delete
 from sqlalchemy import and_, or_, not_
 
 from sqlalchemy import asc, desc
@@ -37,11 +38,19 @@ if __name__ == '__main__':
             usuarios= json.load(file)
             connection.execute(query_insert, usuarios)
 
-            query_delete = users.delete(users.c.id==1)
+            ## Forma 1
+            # query_delete = users.delete(users.c.id==1)
+
+            ## Forma 2
+            query_delete = delete(users).where(users.c.id==1)
+
             result = connection.execute(query_delete)
             print(result.rowcount)
 
             query_select = select([users.c.id, users.c.name]).where(users.c.id==1)
             result = connection.execute(query_select)
             user = result.fetchone()
-            print(user)
+            if user:
+                print(user.name)
+            else:
+                print("No fue posible obtener el usuario!")
