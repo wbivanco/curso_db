@@ -36,24 +36,20 @@ if __name__ == '__main__':
             usuarios= json.load(file)
             connection.execute(query_insert, usuarios)
 
-
-            # Lista en consolo de forma descendente el nombre de los 10 primeros usuarios cuyo genero sea femenino
-            # y posean por pais Argentina o Chile
+            # Muestro el primer registro
             query_select = select([
                 users.c.name
             ]).where(
-                and_(
-                    users.c.gender == "female",
-                    or_(
-                        users.c.country == "Argentina",
-                        users.c.country == "Chile"
-                    )
-                )
-            ).order_by(
-                desc(users.c.name)
-            ).limit(10)
+                users.c.id == 1
+            )
 
+            # Muestro el último regsitro
+            query_select = select([
+                users.c.name
+            ]).order_by(
+                desc(users.c.id)
+            ).limit(1)
 
             result = connection.execute(query_select)
-            for user in result.fetchall():
-                print(user.name)
+            user = result.fetchone()
+            print(user.name)
