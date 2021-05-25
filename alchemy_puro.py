@@ -36,20 +36,9 @@ if __name__ == '__main__':
             usuarios= json.load(file)
             connection.execute(query_insert, usuarios)
 
-            # Muestro el primer registro
-            query_select = select([
-                users.c.name
-            ]).where(
-                users.c.id == 1
-            )
+            query_update = users.update(users.c.id==1).values(
+                name='Cambio de nombre!'
+            ) # Si elimino la condiccion de update se hace para todos los registros
 
-            # Muestro el último regsitro
-            query_select = select([
-                users.c.name
-            ]).order_by(
-                desc(users.c.id)
-            ).limit(1)
-
-            result = connection.execute(query_select)
-            user = result.fetchone()
-            print(user.name)
+            result = connection.execute(query_update)
+            print(result.rowcount) # Muestra la cantidad de registros afectados
