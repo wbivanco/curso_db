@@ -1,3 +1,4 @@
+import json
 from datetime import datetime
 from sqlalchemy import create_engine
 
@@ -12,9 +13,11 @@ users = Table(
     'users',
     metadata,
     Column('id', Integer, primary_key=True),
-    Column('username', String(), index=True, nullable=False),
-    Column('email', String(), nullable=False),
-    Column('created_at', DateTime(), default=datetime.now),
+    Column('age', Integer),
+    Column('country', String(20), nullable=False),
+    Column('email', String(50), nullable=False),
+    Column('gender', String(6), nullable=False),
+    Column('name', String(50), nullable=False),
 )
 
 if __name__ == '__main__':
@@ -25,11 +28,17 @@ if __name__ == '__main__':
     # print(users.c) # Muestra el nombre de los campos de la tabla
     # print(users.c.id) # Muestra el campo id de tabla
 
-    with engine.connect() as conecction:
+    with engine.connect() as connection:
 
-        query_insert = users.insert().values(
-            username='user1',
-            email='user1@codigo.com'
-        )
+        query_insert = users.insert()
 
-        conecction.execute(query_insert)
+        with open('users.json') as file:
+            users = json.load(file)
+
+            # Forma optima de hacer el insert, hace un batch con los usuarios uan sola vez
+            connection.execute(query_insert, users)
+
+            # Forma no tan correcta porque hacer un insert por cada usuario
+            # for user in users:
+            #     query = query_insert.values(**user)
+            #     connection.execute(query)

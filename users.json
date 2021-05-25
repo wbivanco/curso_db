@@ -1,0 +1,37 @@
+[
+  {
+    "age": "46",
+    "country": "Argentina",
+    "email": "wel@mail.com",
+    "gender": "female",
+    "name": "Amanda Car"
+  },
+  {
+    "age": "21",
+    "country": "Bolivia",
+    "email": "wert@mail.com",
+    "gender": "male",
+    "name": "Luis Carrizo"
+  },
+  {
+    "age": "33",
+    "country": "Brasil",
+    "email": "mariojk@mail.com",
+    "gender": "male",
+    "name": "Mario Jeri"
+  },
+  {
+    "age": "17",
+    "country": "Argentina",
+    "email": "lautid@mail.com",
+    "gender": "male",
+    "name": "Lautaro Medina"
+  },
+  {
+    "age": "38",
+    "country": "Chile",
+    "email": "mirnak@mail.com",
+    "gender": "female",
+    "name": "Mirna kuz"
+  }
+]
