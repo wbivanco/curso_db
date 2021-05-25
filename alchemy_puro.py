@@ -21,6 +21,15 @@ if __name__ == '__main__':
     metadata.drop_all(engine) # Borra todas las tablas
     metadata.create_all(engine) # Crea todas las tablas
 
-    print(users) # Muetsra el nombre de la tabla
-    print(users.c) # Muestra el nombre de los campos de la tabla
-    print(users.c.id) # Muestra el campo id de tabla
+    # print(users) # Muetsra el nombre de la tabla
+    # print(users.c) # Muestra el nombre de los campos de la tabla
+    # print(users.c.id) # Muestra el campo id de tabla
+
+    with engine.connect() as conecction:
+
+        query_insert = users.insert().values(
+            username='user1',
+            email='user1@codigo.com'
+        )
+
+        conecction.execute(query_insert)
