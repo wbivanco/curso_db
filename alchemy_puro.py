@@ -33,11 +33,22 @@ if __name__ == '__main__':
             usuarios= json.load(file)
             connection.execute(query_insert, usuarios)
 
-            query_select = select(
-                users.c.id,
-                users.c.email,
-                users.c.name
-            )
+            ## Primer método para select, método select hace sobre *(todos los campos)
+            ## SELECT * FROM users WHERE country = 'Argentina'
+            query_select = users.select(users.c.country == "Argentina")
+
+            ## Segundo método para hacer select, funcción select hace sobro los campos que quiero
+            ## SELECT id, email, nam FORM users WHERE country = 'Argentina'
+            # query_select = select([
+            #     users.c.id,
+            #     users.c.email,
+            #     users.c.name
+            # ]).where(
+            #     users.c.country == "Argentina"
+            # )
+
+            print(query_select) # Imprimo la consulta
+
             result = connection.execute(query_select)
             for user in result.fetchall():
                 print(user.name)
