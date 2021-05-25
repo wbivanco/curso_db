@@ -37,19 +37,11 @@ if __name__ == '__main__':
             usuarios= json.load(file)
             connection.execute(query_insert, usuarios)
 
-            ## Primera forma de actualizar registros, por medio del método update
-            # query_update = users.update(users.c.id==1).values(
-            #     name='Cambio de nombre!'
-            # ) # Si elimino la condiccion de update se hace para todos los registros
+            query_delete = users.delete(users.c.id==1)
+            result = connection.execute(query_delete)
+            print(result.rowcount)
 
-            ## Segunda forma de actulizar registros, por medio de la función update
-            query_update = update(users).values(
-                name='Nuevo cambio de nombre 2.0'
-            ).where(
-                users.c.id==5
-            )
-
-            print(query_update)
-
-            result = connection.execute(query_update)
-            print(result.rowcount) # Muestra la cantidad de registros afectados
+            query_select = select([users.c.id, users.c.name]).where(users.c.id==1)
+            result = connection.execute(query_select)
+            user = result.fetchone()
+            print(user)
