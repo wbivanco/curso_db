@@ -4,6 +4,7 @@ from sqlalchemy import create_engine
 
 from sqlalchemy import MetaData # Catalogo de tablas, puente entre la tabla y el gestor
 from sqlalchemy import Table, Column, Integer, String, DateTime # Permite manipular las tablas
+from sqlalchemy import select # Permite hacer consultas personalizadas
 
 engine = create_engine('postgresql://postgres:12345678@localhost/curso_bd')
 metadata = MetaData()
@@ -24,25 +25,19 @@ if __name__ == '__main__':
     metadata.drop_all(engine) # Borra todas las tablas
     metadata.create_all(engine) # Crea todas las tablas
 
-    # print(users) # Muetsra el nombre de la tabla
-    # print(users.c) # Muestra el nombre de los campos de la tabla
-    # print(users.c.id) # Muestra el campo id de tabla
-
     with engine.connect() as connection:
 
         query_insert = users.insert()
 
         with open('users.json') as file:
             usuarios= json.load(file)
-            ## Forma optima de hacer el insert, hace un batch con los usuarios uan sola vez
             connection.execute(query_insert, usuarios)
 
-            query_select = users.select()
-            result = connection.execute(query_select) # ResultProxy
+            query_select = select(
+                users.c.id,
+                users.c.email,
+                users.c.name
+            )
+            result = connection.execute(query_select)
             for user in result.fetchall():
-                print(user.name) # RowProxy
-
-            ## Forma no tan correcta porque hacer un insert por cada usuario
-            # for user in users:
-            #     query = query_insert.values(**user)
-            #     connection.execute(query)
+                print(user.name)
