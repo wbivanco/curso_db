@@ -5,6 +5,7 @@ from sqlalchemy import MetaData # Catalogo de tablas, puente entre la tabla y el
 from sqlalchemy import Table, Column, Integer, String, DateTime # Permite manipular las tablas
 
 from sqlalchemy import select # Permite hacer consultas personalizadas
+from sqlalchemy import update
 from sqlalchemy import and_, or_, not_
 
 from sqlalchemy import asc, desc
@@ -36,9 +37,19 @@ if __name__ == '__main__':
             usuarios= json.load(file)
             connection.execute(query_insert, usuarios)
 
-            query_update = users.update(users.c.id==1).values(
-                name='Cambio de nombre!'
-            ) # Si elimino la condiccion de update se hace para todos los registros
+            ## Primera forma de actualizar registros, por medio del método update
+            # query_update = users.update(users.c.id==1).values(
+            #     name='Cambio de nombre!'
+            # ) # Si elimino la condiccion de update se hace para todos los registros
+
+            ## Segunda forma de actulizar registros, por medio de la función update
+            query_update = update(users).values(
+                name='Nuevo cambio de nombre 2.0'
+            ).where(
+                users.c.id==5
+            )
+
+            print(query_update)
 
             result = connection.execute(query_update)
             print(result.rowcount) # Muestra la cantidad de registros afectados
