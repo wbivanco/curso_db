@@ -27,3 +27,13 @@ session = Session()
 if __name__ == '__main__':
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
+
+    user1 = User(username='User1', email='user1@mail.com')
+    user2 = User(username='User2', email='user2@mail.com')
+    user3 = User(username='User3', email='user3@mail.com')
+
+    session.add(user1)
+    session.add(user2)
+    session.add(user3)
+
+    session.commit()
