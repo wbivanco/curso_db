@@ -6,6 +6,8 @@ from sqlalchemy import create_engine
 from sqlalchemy import MetaData
 from sqlalchemy import Table, Column, Integer, String, DateTime, Float, ForeignKey
 
+from sqlalchemy import select
+
 engine = create_engine('postgresql://postgres:12345678@localhost/curso_bd')
 metadata = MetaData()
 
@@ -55,3 +57,21 @@ if __name__ == '__main__':
             order_id=1
         )
         connection.execute(query_insert)
+
+        query_select = select(
+            [
+                products.c.title,
+                products.c.price
+            ]
+        ).select_from(
+            orders.join(products)
+        ).where(
+            orders.c.id == 1
+        )
+
+        print(query_select)
+
+        result = connection.execute(query_select)
+
+        for product in result.fetchall():
+            print(product.title, product.price)
