@@ -1,56 +1,57 @@
 import json
+from datetime import datetime
+
 from sqlalchemy import create_engine
 
-from sqlalchemy import MetaData # Catalogo de tablas, puente entre la tabla y el gestor
-from sqlalchemy import Table, Column, Integer, String, DateTime # Permite manipular las tablas
-
-from sqlalchemy import select # Permite hacer consultas personalizadas
-from sqlalchemy import update
-from sqlalchemy import delete
-from sqlalchemy import and_, or_, not_
-
-from sqlalchemy import asc, desc
+from sqlalchemy import MetaData
+from sqlalchemy import Table, Column, Integer, String, DateTime, Float, ForeignKey
 
 engine = create_engine('postgresql://postgres:12345678@localhost/curso_bd')
 metadata = MetaData()
 
-# Defino el nombre de la tabla: users
-users = Table(
-    'users',
+orders = Table(
+    'orders',
     metadata,
-    Column('id', Integer, primary_key=True),
-    Column('age', Integer),
-    Column('country', String(20), nullable=False),
-    Column('email', String(50), nullable=False),
-    Column('gender', String(6), nullable=False),
-    Column('name', String(50), nullable=False),
+    Column('id', Integer(), primary_key=True),
+)
+
+products = Table(
+    'products',
+    metadata,
+    Column('id', Integer(), primary_key=True),
+    Column('title', String()),
+    Column('price', Float(5,2)),
+    Column('order_id', ForeignKey('orders.id'))
 )
 
 if __name__ == '__main__':
-    metadata.drop_all(engine) # Borra todas las tablas
-    metadata.create_all(engine) # Crea todas las tablas
+    metadata.drop_all(engine)
+    metadata.create_all(engine)
 
     with engine.connect() as connection:
 
-        query_insert = users.insert()
+        # Orden
+        query_insert = orders.insert()
+        connection.execute(query_insert)
 
-        with open('users.json') as file:
-            usuarios= json.load(file)
-            connection.execute(query_insert, usuarios)
+        # Productos
+        query_insert = products.insert().values(
+            title='IPhone',
+            price=500.50,
+            order_id=1
+        )
+        connection.execute(query_insert)
 
-            ## Forma 1
-            # query_delete = users.delete(users.c.id==1)
+        query_insert = products.insert().values(
+            title='IPad',
+            price=800.00,
+            order_id=1
+        )
+        connection.execute(query_insert)
 
-            ## Forma 2
-            query_delete = delete(users).where(users.c.id==1)
-
-            result = connection.execute(query_delete)
-            print(result.rowcount)
-
-            query_select = select([users.c.id, users.c.name]).where(users.c.id==1)
-            result = connection.execute(query_select)
-            user = result.fetchone()
-            if user:
-                print(user.name)
-            else:
-                print("No fue posible obtener el usuario!")
+        query_insert = products.insert().values(
+            title='MacBook',
+            price=2000.50,
+            order_id=1
+        )
+        connection.execute(query_insert)
