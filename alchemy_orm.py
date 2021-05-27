@@ -5,6 +5,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Column, Integer, String, DateTime
 
+from sqlalchemy.orm.exc import NoResultFound
+
 engine = create_engine('postgresql://postgres:12345678@localhost/curso_bd')
 
 Base = declarative_base()
@@ -38,22 +40,22 @@ if __name__ == '__main__':
 
     session.commit()
 
-    # SELECT * FROM users
-    # users = session.query(User).all()
+    # fisrt, si no obtiene registros devuelve None
+    # user = session.query(User).filter(
+    #     User.id == 11
+    # ).first()
+    #
+    # if user:
+    #     print(user)
+    # else:
+    #     print("El usuario no existe en la basa de datos!")
 
-    # SELECT * FROM users WHERE id >=2 AND username = 'User3', utilizo en query una clase y me devuelve una
-    # instancia de la clase
-    # users = session.query(User).filter(
-    #     User.id >= 2
-    # ).filter(
-    #     User.username == 'User3'
-    # )
+    # one, si no obtiene un registros lanza un excepcion
+    try:
+        user = session.query(User).filter(
+            User.id == 1
+        ).one()
 
-    # SELECT id, username, email FROM users WHERE id >=2, utilizo en query argumentos y me devuelve tuplas
-    # instancia de la clase
-    users = session.query(User.id, User.username, User.email).filter(
-        User.id >= 2
-    )
-
-    for user in users:
         print(user)
+    except NoResultFound as err:
+        print("El usuario no existe en la basa de datos!")
