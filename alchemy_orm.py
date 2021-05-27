@@ -37,3 +37,23 @@ if __name__ == '__main__':
     session.add(user3)
 
     session.commit()
+
+    # SELECT * FROM users
+    # users = session.query(User).all()
+
+    # SELECT * FROM users WHERE id >=2 AND username = 'User3', utilizo en query una clase y me devuelve una
+    # instancia de la clase
+    # users = session.query(User).filter(
+    #     User.id >= 2
+    # ).filter(
+    #     User.username == 'User3'
+    # )
+
+    # SELECT id, username, email FROM users WHERE id >=2, utilizo en query argumentos y me devuelve tuplas
+    # instancia de la clase
+    users = session.query(User.id, User.username, User.email).filter(
+        User.id >= 2
+    )
+
+    for user in users:
+        print(user)
