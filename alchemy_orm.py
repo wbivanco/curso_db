@@ -40,23 +40,9 @@ if __name__ == '__main__':
 
     session.commit()
 
-    # Forma 1 de modificar un registro, mediante un objeto
-    # user = session.query(User).filter(User.id == 1).first()
-    # user.username = "Nuevo username"
-    # user.email = "nuevo@email.com"
-    #
-    # session.add(user)
-    # session.commit()
-
-    # Forma 2 de modificar un registro, mediante una consulta
     session.query(User).filter(
-        User.id == 2
-    ).update(
-        {
-            User.username: "Nuevo nombre 2",
-            User.email: "nuevomail2@correo.com"
-        }
-    )
+        User.id == 3
+    ).delete()
 
     session.commit()
 
