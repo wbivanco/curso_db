@@ -45,6 +45,8 @@ if __name__ == '__main__':
 
     user1 = User(username='User1', email='emil1@mail.com')
     user2 = User(username='User2', email='emil2@mail.com')
+    user3 = User(username='User3', email='emil3@mail.com')
+    user4 = User(username='User4', email='emil4@mail.com')
 
     user1.courses.append(
         Course(title='Curso de Postgres')
@@ -60,4 +62,30 @@ if __name__ == '__main__':
 
     session.add(user1)
     session.add(user2)
+    session.add(user3)
+    session.add(user4)
     session.commit()
+
+    # Listar en consola todos los usuarios que posean por lo menos un curso (INNER JOIN).
+
+    # users = session.query(User).join(Course)
+
+    # En caso que no este especificado la clave foranea
+    users = session.query(User).join(
+        Course, User.id == Course.user_id # on
+    )
+
+    # for user in users:
+    #     print(user)
+
+
+
+    # Listar en consola todos los usuarios sin curso (LEFT JOIN).
+    users = session.query(User).outerjoin(
+        Course
+    ).filter(
+        Course.id == None
+    )
+
+    for user in users:
+        print(user)
