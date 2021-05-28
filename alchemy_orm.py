@@ -2,7 +2,7 @@ from datetime import datetime
 
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
 
 from sqlalchemy.orm.exc import NoResultFound
@@ -18,6 +18,7 @@ class User(Base):
     username = Column(String(50), nullable=False, unique=True)
     email = Column(String(50), nullable=False, unique=True)
     created_at = Column(DateTime(), default=datetime.now())
+    courses = relationship('Course', backref='user')
 
     def __str__(self):
         return self.username
@@ -49,5 +50,14 @@ if __name__ == '__main__':
     session.commit()
 
     course1 = Course(title='Curso de BD', user_id=user1.id)
+    course2 = Course(title='Curso de Python', user_id=user1.id)
+    course3 = Course(title='Curso de Go', user_id=user1.id)
     session.add(course1)
+    session.add(course2)
+    session.add(course3)
     session.commit()
+
+    # for course in user1.courses:
+    #     print(course)
+
+    print(course1.user)
