@@ -45,19 +45,19 @@ if __name__ == '__main__':
 
     user1 = User(username='User1', email='emil1@mail.com')
     user2 = User(username='User2', email='emil2@mail.com')
+
+    user1.courses.append(
+        Course(title='Curso de Postgres')
+    )
+
+    user1.courses.append(
+        Course(title='Curso de Django')
+    )
+
+    user1.courses.append(
+        Course(title='Curso de Laravel')
+    )
+
     session.add(user1)
     session.add(user2)
     session.commit()
-
-    course1 = Course(title='Curso de BD', user_id=user1.id)
-    course2 = Course(title='Curso de Python', user_id=user1.id)
-    course3 = Course(title='Curso de Go', user_id=user1.id)
-    session.add(course1)
-    session.add(course2)
-    session.add(course3)
-    session.commit()
-
-    # for course in user1.courses:
-    #     print(course)
-
-    print(course1.user)
