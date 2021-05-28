@@ -40,22 +40,23 @@ if __name__ == '__main__':
 
     session.commit()
 
-    # fisrt, si no obtiene registros devuelve None
-    # user = session.query(User).filter(
-    #     User.id == 11
-    # ).first()
+    # Forma 1 de modificar un registro, mediante un objeto
+    # user = session.query(User).filter(User.id == 1).first()
+    # user.username = "Nuevo username"
+    # user.email = "nuevo@email.com"
     #
-    # if user:
-    #     print(user)
-    # else:
-    #     print("El usuario no existe en la basa de datos!")
+    # session.add(user)
+    # session.commit()
 
-    # one, si no obtiene un registros lanza un excepcion
-    try:
-        user = session.query(User).filter(
-            User.id == 1
-        ).one()
+    # Forma 2 de modificar un registro, mediante una consulta
+    session.query(User).filter(
+        User.id == 2
+    ).update(
+        {
+            User.username: "Nuevo nombre 2",
+            User.email: "nuevomail2@correo.com"
+        }
+    )
 
-        print(user)
-    except NoResultFound as err:
-        print("El usuario no existe en la basa de datos!")
+    session.commit()
+
